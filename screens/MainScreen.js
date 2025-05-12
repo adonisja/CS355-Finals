@@ -1,23 +1,75 @@
+// screens/HomeScreen.js
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ImageBackground } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
-export default function MainScreen() {
+export default function HomeScreen() {
+  const nav = useNavigation();
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Put my Queries here when i Make them...</Text>
-    </View>
+    <ImageBackground
+      source={require('../assets/image/welcome.jpg')}
+      style={styles.bg}
+      resizeMode="cover"
+    >
+      <View style={styles.overlay}>
+        <Text style={styles.header}>IMBD Query Hub</Text>
+
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => nav.navigate('Results', { queryType: 'Directors' })}
+        >
+          <Text style={styles.buttonText}>Directors By Name</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => nav.navigate('Results', { queryType: 'TopRated' })}
+        >
+          <Text style={styles.buttonText}>Top Rated Movies</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => nav.navigate('Results', { queryType: 'MoviesByYear' })}
+        >
+          <Text style={styles.buttonText}>Movies By Year</Text>
+        </TouchableOpacity>
+      </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#FFF',
+  bg: { flex: 1,
+    width: '100%',
+    height: '100%'
   },
-  text: {
-    fontSize: 20,
-    color: '#333',
+  overlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+    backgroundColor: 'rgba(0,0,0,0.3)',
+  },
+  header: {
+    fontSize: 26, 
+    fontWeight: 'bold',
+    color: '#FFF',
+    marginBottom: 30
+  },
+  button: {
+    backgroundColor: '#E50914',
+    paddingVertical: 14,
+    paddingHorizontal: 30,
+    borderRadius: 25,
+    marginVertical: 10,
+    width: '80%',
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: '#FFF',
+    fontSize: 18,
+    fontWeight: '600'
   },
 });
