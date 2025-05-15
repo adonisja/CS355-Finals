@@ -1,36 +1,14 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-<<<<<<< HEAD
-
-import WelcomeScreen from './screens/WelcomeScreen';
-import ResultsScreen from './screens/ResultsScreen';
-import HomeScreen from './screens/HomeScreen';
-
-const Stack = createStackNavigator();
-
-export default function App() {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator 
-        screenOptions={{ headerShown: false }}
-      >
-        <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="Results" component={ResultsScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-}
-=======
 import { ActivityIndicator } from 'react-native';
 import { Asset } from 'expo-asset';
 import * as FileSystem from 'expo-file-system';
 import * as SQLite from 'expo-sqlite';
 
 import Home from './screens/HomeScreen.js';
-import Welcome from './screens/WelcomeScreen.js';
 import Results from './screens/ResultsScreen.js';
+import Home from './screens/HomeScreen.js';
 
 
 /* Database file location on this project */
@@ -92,5 +70,3 @@ export default function App() {
     </NavigationContainer>
   )
 }
-
->>>>>>> 3c13a128a54989c2117c04a816b985692313e716
