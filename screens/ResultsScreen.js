@@ -12,71 +12,84 @@ const DirectorsList = (db) => {
     });
     return (
         <View>
-           <FlatList 
-                renderItem={({item}) => <Text> {item.director_name} | {item.movies_directed} </Text>}
-                data={directors}
+            <FlatList 
+                data={allRows}
                 keyExtractor={(item, index) => index.toString()}
+                renderItem={({ item }) => (
+                <Text>{item.director_name} | {item.movies_directed}</Text>
+                 )}
             />
         </View>
     );
 }
 
-const TopRated = (db) => {
-    const allRows = db.getAllSync('SELECT m.title, r.rating, r.votes FROM movies AS m JOIN ratings AS r ON m.id = r.movie_id ORDER BY r.rating DESC');
-    return (
-        <View  >            
-            <Text >
-                Food Products Database {'\n\n'}
-            </Text>            
-            <Text>
-                There are {allRows[0]['N']} products in the database.
-            </Text>
-        </View>
-    );
-}
+const TopRated = () => {
+  const allRows = db.getAllSync(`
+    SELECT m.title, r.rating, r.votes 
+    FROM movies AS m 
+    JOIN ratings AS r ON m.id = r.movie_id 
+    ORDER BY r.rating DESC
+  `);
 
-const MoviesByYear = (db) => {
-    const allRows = db.getAllSync('SELECT m.title AS movie_title, p.name AS director_name FROM movies AS m JOIN directors AS d ON m.id = d.movie_id JOIN people AS p ON d.person_id = p.id WHERE m.year = 2020');
-    return (
-        <View  >            
-            <Text >
-                Food Products Database {'\n\n'}
-            </Text>            
-            <Text>
-                There are {allRows[0]['N']} products in the database.
-            </Text>
-        </View>
-    );
-}
-
-export default function Results({ navigation, route }) {
-    const db = SQLite.openDatabaseSync('imdb.db');
-    const { queryType } = route.params;
-
-    let content;
-    switch (queryType) {
-        case 'DirectorsList':
-            content = <Text>Directors Query Selected</Text>;
-            break;
-        case 'TopRated':
-            content = <Text>Top Rated Query Selected</Text>;
-            break;
-        case 'MoviesByYear':
-            content = <Text>Movies By Year Query Selected</Text>;
-            break;
-        default:
-            content = <Text>Invalid Query Type</Text>;
-    }
-
-    return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            if (queryType === 'DirectorsList') {
-              DirectorsList(db)
-            } else if (queryType === 'TopRated') {
-              TopRated(db)
-            } else if (queryType === 'MoviesByYear') {
-              MoviesByYear(db)
-            }
-        </View>
-    );
+  return (
+    <FlatList 
+      data={allRows}
+      keyExtractor={(item, index) => index.toString()}
+      renderItem={({ item }) => (
+        <Text>{item.title} | Rating: {item.rating} | Votes: {item.votes}</Text>
+      )}
+    />
+  );
 };
+
+const MoviesByYear = () => {
+  const allRows = db.getAllSync(`
+    SELECT m.title AS movie_title, p.name AS director_name 
+    FROM movies AS m 
+    JOIN directors AS d ON m.id = d.movie_id 
+    JOIN people AS p ON d.person_id = p.id 
+    WHERE m.year = 2020
+  `);
+
+  return (
+    <FlatList 
+      data={allRows}
+      keyExtractor={(item, index) => index.toString()}
+      renderItem={({ item }) => (
+        <Text>{item.movie_title} | Director: {item.director_name}</Text>
+      )}
+    />
+  );
+};
+
+export default function Results({ route }) {
+  const { queryType } = route.params;
+
+  let content;
+  switch (queryType) {
+    case 'DirectorsList':
+      content = <DirectorsList />;
+      break;
+    case 'TopRated':
+      content = <TopRated />;
+      break;
+    case 'MoviesByYear':
+      content = <MoviesByYear />;
+      break;
+    default:
+      content = <Text>Invalid Query Type</Text>;
+  }
+
+  return (
+    <View style={styles.container}>
+      {content}
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16
+  }
+});
