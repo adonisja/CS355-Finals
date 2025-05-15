@@ -7,8 +7,8 @@ import * as FileSystem from 'expo-file-system';
 import * as SQLite from 'expo-sqlite';
 
 import Home from './screens/HomeScreen.js';
-import Welcome from './screens/WelcomeScreen.js'
 import Results from './screens/ResultsScreen.js';
+import Welcome from './screens/welcomeScreen.js'
 
 
 /* Database file location on this project */
@@ -20,7 +20,7 @@ async function installDB () {
   if (!(await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'SQLite')).exists) {
     await FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'SQLite');
   }
-  await FileSystem.downloadAsync( Asset.fromModule(assetID).uri, FileSystem.documentDirectory + 'SQLite/foodProducts.db',
+  await FileSystem.downloadAsync( Asset.fromModule(assetID).uri, FileSystem.documentDirectory + 'SQLite/imdb.db',
   ).then(({ uri }) => {
     console.log('Finished downloading to ', uri);
   }).catch(error => {

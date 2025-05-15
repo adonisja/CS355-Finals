@@ -4,24 +4,41 @@ import { useRoute } from '@react-navigation/native';
 import * as SQLite from 'expo-sqlite';
 
 
+// const DirectorsList = (db) => {
+//     const allRows = db.getAllSync(`SELECT p.name AS director_name, COUNT(*) AS movies_directed
+//         FROM people AS p 
+//         JOIN directors AS d ON d.person_id = p.id 
+//         GROUP BY p.name 
+//         ORDER BY movies_directed DESC`);
+//     const directors=[];
+//     allRows.forEach((row) => {
+//         directors.push(row);
+//     });
+//     return (
+//         <View>
+//             <FlatList 
+//                 data={allRows}
+//                 keyExtractor={(item, index) => index.toString()}
+//                 renderItem={({ item }) => (
+//                 <Text>{item.director_name} | {item.movies_directed}</Text>
+//                  )}
+//             />
+//         </View>
+//     );
+// }
+
 const DirectorsList = (db) => {
-    const allRows = db.getAllSync(`SELECT p.name AS director_name, COUNT(*) AS movies_directed
-        FROM people AS p 
-        JOIN directors AS d ON d.person_id = p.id 
-        GROUP BY p.name 
-        ORDER BY movies_directed DESC`);
+    const allRows = db.getAllSync('SELECT p.name AS director_name, COUNT(*) AS movies_directed FROM people AS p JOIN directors AS d ON d.person_id = p.id GROUP BY p.name ORDER BY movies_directed DESC');
     const directors=[];
     allRows.forEach((row) => {
         directors.push(row);
     });
     return (
         <View>
-            <FlatList 
-                data={allRows}
+           <FlatList 
+                renderItem={({item}) => <Text> {item.director_name} | {item.movies_directed} </Text>}
+                data={directors}
                 keyExtractor={(item, index) => index.toString()}
-                renderItem={({ item }) => (
-                <Text>{item.director_name} | {item.movies_directed}</Text>
-                 )}
             />
         </View>
     );
@@ -66,25 +83,27 @@ const MoviesByYear = (db) => {
         <Text>{item.movie_title} | Director: {item.director_name}</Text>
       )}
     />
-  );
+  )
 };
 
 export default function Results({ route }) {
+  const db = SQLite.openDatabaseSync('imdb.db');
   const { queryType } = route.params;
+  console.log(`queryType: ${queryType}`)
 
   let content;
   switch (queryType) {
     case 'DirectorsList':
-      content = <DirectorsList />;
+      content = DirectorsList(db);
       break;
     case 'TopRated':
-      content = <TopRated />;
+      content = TopRated(db);
       break;
     case 'MoviesByYear':
-      content = <MoviesByYear />;
+      content = MoviesByYear(db);
       break;
     default:
-      content = <Text>Invalid Query Type</Text>;
+      content = <Text>Invalid queryType</Text>;
   }
 
   return (
