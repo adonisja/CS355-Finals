@@ -14,7 +14,7 @@ export default function HomeScreen() {
     >
       <SafeAreaView style={styles.overlay}>
         <Text style={styles.header}>IMDB Query Hub</Text>
-        <QueryButton label="Directors By Name" queryType="Directors" navigation={nav} />
+        <QueryButton label="Directors By Name" queryType="DirectorsList" navigation={nav} />
         <QueryButton label="Top Rated Movies" queryType="TopRated" navigation={nav} />
         <QueryButton label="Movies By Year" queryType="MoviesByYear" navigation={nav} />
       </SafeAreaView>
