@@ -9,10 +9,10 @@ export default function WelcomeScreen() {
         <View style={styles.container}>
             <Image 
                 source={require('../assets/image/welcome.jpg')}
-                style={styles.bg}
+                style={styles.image}
                 resizeMode="cover"
             />
-            <Text style={styles.title}>Welcome to IMBD Director Query App</Text>
+            <Text style={styles.title}>Welcome to IMDB Director Query App</Text>
             <Text style={styles.subtitle}>By Nathan Hilliard and Akkeem Tyrell</Text>
 
             <TouchableOpacity 
@@ -59,4 +59,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
     },
+
 });
+

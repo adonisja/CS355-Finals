@@ -17,7 +17,11 @@
     "expo": "~53.0.8",
     "expo-asset": "~11.1.5",
     "expo-file-system": "~18.1.9",
+<<<<<<< HEAD
     "expo-sqlite": "~15.2.9",
+=======
+    "expo-sqlite": "~15.2.10",
+>>>>>>> 3c13a128a54989c2117c04a816b985692313e716
     "expo-status-bar": "~2.2.3",
     "react": "19.0.0",
     "react-native": "0.79.2",
