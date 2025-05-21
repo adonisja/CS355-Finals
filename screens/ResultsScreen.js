@@ -102,7 +102,7 @@ const DirectorsList = ({ db }) => {
         />
       </View>
 
-      {/* List + Side Nav */}
+      {/* List */}
       <View style={styles.mainContainer}>
         <SectionList
           ref={sectionListRef}
@@ -131,6 +131,7 @@ const DirectorsList = ({ db }) => {
           stickySectionHeadersEnabled
         />
 
+        {/* A–Z Side Nav */}
         <ScrollView
           style={styles.letterScroller}
           contentContainerStyle={styles.letterContainer}
@@ -305,7 +306,7 @@ const styles = StyleSheet.create({
   },
   mainContainer: {
     flex: 1,
-    flexDirection: 'row',
+    position: 'relative',
   },
   listContainer: {
     flex: 1,
@@ -315,26 +316,29 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
   },
   letterScroller: {
-    width: 30,
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    right: 0,
+    width: 20,
     backgroundColor: 'rgba(0,0,0,0.03)',
+    paddingVertical: 10,
   },
   letterContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 10,
   },
   letterButton: {
-    paddingVertical: 4,
-    paddingHorizontal: 5,
+    paddingVertical: 2,
   },
   letterText: {
-    fontSize: 12,
+    fontSize: 10,
     color: '#E50914',
     fontWeight: 'bold',
   },
   activeLetter: {
     color: '#000',
-    fontSize: 14,
+    fontSize: 12,
   },
   sectionHeader: {
     backgroundColor: '#E50914',
