@@ -1,5 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, SectionList, StyleSheet, TextInput, TouchableOpacity, ScrollView, SafeAreaView } from 'react-native';
+import {
+  View,
+  Text,
+  SectionList,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  ScrollView,
+  SafeAreaView,
+} from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import * as SQLite from 'expo-sqlite';
 
@@ -28,7 +37,10 @@ const DirectorsList = ({ db }) => {
       if (existingGroup) {
         existingGroup.data.push(director);
       } else {
-        acc.push({ title: firstLetter, data: [director] });
+        acc.push({
+          title: firstLetter,
+          data: [director],
+        });
       }
       return acc;
     }, []);
@@ -60,33 +72,55 @@ const DirectorsList = ({ db }) => {
     });
   };
 
+  const getItemLayout = (data, index) => ({
+    length: 60,
+    offset: 60 * index,
+    index,
+  });
+
+  const onScrollToIndexFailed = (info) => {
+    const wait = new Promise(resolve => setTimeout(resolve, 500));
+    wait.then(() => {
+      sectionListRef.current?.scrollToLocation({
+        sectionIndex: info.sectionIndex,
+        itemIndex: 0,
+        animated: true,
+      });
+    });
+  };
+
   return (
     <SafeAreaView style={styles.safeArea}>
-      <View style={styles.directorsList.searchContainer}>
+      {/* Search */}
+      <View style={styles.searchContainer}>
         <TextInput
-          style={styles.directorsList.searchInput}
+          style={styles.searchInput}
           placeholder="Search directors..."
           placeholderTextColor="#999"
           value={searchQuery}
           onChangeText={setSearchQuery}
         />
       </View>
-      <View style={styles.directorsList.mainContainer}>
+
+      {/* List */}
+      <View style={styles.mainContainer}>
         <SectionList
           ref={sectionListRef}
           sections={filteredData}
           keyExtractor={(item, index) => item.director_name + index}
-          style={styles.directorsList.listContainer}
-          contentContainerStyle={styles.directorsList.listContent}
+          getItemLayout={getItemLayout}
+          onScrollToIndexFailed={onScrollToIndexFailed}
+          style={styles.listContainer}
+          contentContainerStyle={styles.listContent}
           renderItem={({ item }) => (
-            <View style={styles.directorsList.directorItem}>
-              <Text style={styles.directorsList.directorName}>{item.director_name}</Text>
-              <Text style={styles.directorsList.movieCount}>{item.movies_directed} movies</Text>
+            <View style={styles.directorItem}>
+              <Text style={styles.directorName}>{item.director_name}</Text>
+              <Text style={styles.movieCount}>{item.movies_directed} movies</Text>
             </View>
           )}
           renderSectionHeader={({ section }) => (
-            <View style={styles.directorsList.sectionHeader}>
-              <Text style={styles.directorsList.sectionTitle}>{section.title}</Text>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionTitle}>{section.title}</Text>
             </View>
           )}
           onViewableItemsChanged={({ viewableItems }) => {
@@ -96,21 +130,23 @@ const DirectorsList = ({ db }) => {
           }}
           stickySectionHeadersEnabled
         />
+
+        {/* A–Z Side Nav */}
         <ScrollView
-          style={styles.directorsList.letterScroller}
-          contentContainerStyle={styles.directorsList.letterContainer}
+          style={styles.letterScroller}
+          contentContainerStyle={styles.letterContainer}
           showsVerticalScrollIndicator={false}
         >
           {letters.map((letter, index) => (
             <TouchableOpacity
               key={letter}
               onPress={() => scrollToSection(index)}
-              style={styles.directorsList.letterButton}
+              style={styles.letterButton}
             >
               <Text
                 style={[
-                  styles.directorsList.letterText,
-                  letter === activeLetter && styles.directorsList.activeLetter,
+                  styles.letterText,
+                  letter === activeLetter && styles.activeLetter,
                 ]}
               >
                 {letter}
@@ -145,7 +181,7 @@ const TopRated = ({ db }) => {
   }, [db]);
 
   if (allRows.length === 0) {
-    return <Text style={styles.shared.errorText}>Loading top rated movies...</Text>;
+    return <Text style={styles.errorText}>Loading top rated movies...</Text>;
   }
 
   return (
@@ -153,19 +189,19 @@ const TopRated = ({ db }) => {
       sections={[{ title: 'Top Rated Movies', data: allRows }]}
       keyExtractor={(item, index) => item.title + index}
       renderItem={({ item }) => (
-        <View style={styles.topRated.movieItem}>
-          <Text style={styles.topRated.movieTitle}>{item.title}</Text>
-          <Text style={styles.topRated.movieDetails}>
+        <View style={styles.movieItem}>
+          <Text style={styles.movieTitle}>{item.title}</Text>
+          <Text style={styles.movieDetails}>
             Rating: {item.rating} | Votes: {item.votes}
           </Text>
         </View>
       )}
       renderSectionHeader={({ section }) => (
-        <View style={styles.shared.sectionHeader}>
-          <Text style={styles.shared.sectionTitle}>{section.title}</Text>
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>{section.title}</Text>
         </View>
       )}
-      contentContainerStyle={styles.topRated.listContent}
+      contentContainerStyle={styles.listContent}
     />
   );
 };
@@ -192,7 +228,7 @@ const MoviesByYear = ({ db }) => {
   }, [db]);
 
   if (allRows.length === 0) {
-    return <Text style={styles.shared.errorText}>Loading movies by year...</Text>;
+    return <Text style={styles.errorText}>Loading movies by year...</Text>;
   }
 
   return (
@@ -200,17 +236,17 @@ const MoviesByYear = ({ db }) => {
       sections={[{ title: '2020 Movies', data: allRows }]}
       keyExtractor={(item, index) => item.movie_title + index}
       renderItem={({ item }) => (
-        <View style={styles.moviesByYear.movieItem}>
-          <Text style={styles.moviesByYear.movieTitle}>{item.movie_title}</Text>
-          <Text style={styles.moviesByYear.directorName}>Director: {item.director_name}</Text>
+        <View style={styles.movieItem}>
+          <Text style={styles.movieTitle}>{item.movie_title}</Text>
+          <Text style={styles.directorName}>Director: {item.director_name}</Text>
         </View>
       )}
       renderSectionHeader={({ section }) => (
-        <View style={styles.moviesByYear.sectionHeader}>
-          <Text style={styles.moviesByYear.sectionTitle}>{section.title}</Text>
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>{section.title}</Text>
         </View>
       )}
-      contentContainerStyle={styles.moviesByYear.listContent}
+      contentContainerStyle={styles.listContent}
     />
   );
 };
@@ -235,167 +271,124 @@ export default function Results() {
       content = <MoviesByYear db={db} />;
       break;
     default:
-      content = <Text style={styles.shared.errorText}>Invalid queryType</Text>;
+      content = <Text style={styles.errorText}>Invalid queryType</Text>;
   }
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <View style={styles.shared.container}>{content}</View>
+      <View style={styles.container}>{content}</View>
     </SafeAreaView>
   );
 }
 
 // ─────────────────────────────────────────────
-// STYLESHEET
+// STYLES
 // ─────────────────────────────────────────────
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: '#fff',
   },
-  shared: {
-    container: { flex: 1 },
-    sectionHeader: {
-      backgroundColor: '#E50914',
-      paddingVertical: 8,
-      paddingHorizontal: 15,
-    },
-    sectionTitle: {
-      fontSize: 16,
-      fontWeight: 'bold',
-      color: 'white',
-    },
-    errorText: {
-      color: 'red',
-      textAlign: 'center',
-      marginTop: 20,
-    },
+  container: {
+    flex: 1,
   },
-  directorsList: {
-    searchContainer: {
-      padding: 15,
-      backgroundColor: '#f5f5f5',
-      borderBottomWidth: 1,
-      borderBottomColor: '#ddd',
-    },
-    searchInput: {
-      backgroundColor: 'white',
-      padding: 10,
-      borderRadius: 8,
-      fontSize: 16,
-    },
-    mainContainer: {
-      flex: 1,
-      position: 'relative',
-    },
-    listContainer: {
-      flex: 1,
-    },
-    listContent: {
-      flexGrow: 1,
-      paddingBottom: 40,
-    },
-    directorItem: {
-      padding: 15,
-      borderBottomWidth: 1,
-      borderBottomColor: '#eee',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      backgroundColor: 'white',
-    },
-    directorName: {
-      fontSize: 16,
-    },
-    movieCount: {
-      fontSize: 14,
-      color: '#666',
-    },
-    letterScroller: {
-      position: 'absolute',
-      top: 0,
-      bottom: 0,
-      right: 0,
-      width: 20,
-      backgroundColor: 'rgba(0,0,0,0.03)',
-      paddingVertical: 10,
-    },
-    letterContainer: {
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    letterButton: {
-      paddingVertical: 2,
-    },
-    letterText: {
-      fontSize: 10,
-      color: '#E50914',
-      fontWeight: 'bold',
-    },
-    activeLetter: {
-      color: '#000',
-      fontSize: 12,
-    },
-    sectionHeader: {
-      backgroundColor: '#E50914',
-      paddingVertical: 8,
-      paddingHorizontal: 15,
-    },
-    sectionTitle: {
-      fontSize: 16,
-      fontWeight: 'bold',
-      color: 'white',
-    },
+  searchContainer: {
+    padding: 15,
+    backgroundColor: '#f5f5f5',
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
   },
-  topRated: {
-    listContent: {
-      flexGrow: 1,
-      paddingBottom: 40,
-    },
-    movieItem: {
-      padding: 15,
-      borderBottomWidth: 1,
-      borderBottomColor: '#eee',
-      backgroundColor: 'white',
-    },
-    movieTitle: {
-      fontSize: 16,
-      fontWeight: '500',
-      marginBottom: 4,
-    },
-    movieDetails: {
-      fontSize: 14,
-      color: '#666',
-    },
+  searchInput: {
+    backgroundColor: 'white',
+    padding: 10,
+    borderRadius: 8,
+    fontSize: 16,
   },
-  moviesByYear: {
-    listContent: {
-      flexGrow: 1,
-      paddingBottom: 40,
-    },
-    movieItem: {
-      padding: 15,
-      borderBottomWidth: 1,
-      borderBottomColor: '#eee',
-      backgroundColor: 'white',
-    },
-    movieTitle: {
-      fontSize: 16,
-      fontWeight: '500',
-      marginBottom: 4,
-    },
-    directorName: {
-      fontSize: 14,
-      color: '#666',
-    },
-    sectionHeader: {
-      backgroundColor: '#E50914',
-      paddingVertical: 8,
-      paddingHorizontal: 15,
-    },
-    sectionTitle: {
-      fontSize: 16,
-      fontWeight: 'bold',
-      color: 'white',
-    },
+  mainContainer: {
+    flex: 1,
+    position: 'relative',
+  },
+  listContainer: {
+    flex: 1,
+  },
+  listContent: {
+    flexGrow: 1,
+    paddingBottom: 40,
+  },
+  letterScroller: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    right: 0,
+    width: 50,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    borderLeftWidth: 1,
+    borderColor: '#ddd',
+    paddingVertical: 10,
+  },
+  letterContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  letterButton: {
+    paddingVertical: 6,
+  },
+  letterText: {
+    fontSize: 10,
+    color: '#E50914',
+    fontWeight: 'bold',
+  },
+  activeLetter: {
+    fontSize: 18,
+    color: '#000',
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    paddingHorizontal: 4,
+    overflow: 'hidden',
+  },
+  sectionHeader: {
+    backgroundColor: '#E50914',
+    paddingVertical: 8,
+    paddingHorizontal: 15,
+  },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: 'white',
+  },
+  directorItem: {
+    padding: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    backgroundColor: 'white',
+  },
+  directorName: {
+    fontSize: 16,
+  },
+  movieCount: {
+    fontSize: 14,
+    color: '#666',
+  },
+  movieItem: {
+    padding: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+    backgroundColor: 'white',
+  },
+  movieTitle: {
+    fontSize: 16,
+    fontWeight: '500',
+    marginBottom: 4,
+  },
+  movieDetails: {
+    fontSize: 14,
+    color: '#666',
+  },
+  errorText: {
+    color: 'red',
+    textAlign: 'center',
+    marginTop: 20,
   },
 });

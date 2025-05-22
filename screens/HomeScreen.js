@@ -23,12 +23,17 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  bg: { flex: 1, width: '100%', height: '100%' },
+  bg: { 
+    flex: 1, 
+    width: '100%', 
+    height: '100%', 
+  },
   overlay: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
+    paddingVertical: 40,
+    paddingHorizontal: 10,
     backgroundColor: 'rgba(0,0,0,0.5)',
   },
   header: {

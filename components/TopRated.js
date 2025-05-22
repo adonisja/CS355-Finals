@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SectionList, Text, View } from 'react-native';
 import sharedStyles from './styles/sharedStyles';
 
-const MoviesByYear = ({ db }) => {
+const TopRated = ({ db }) => {
   const [allRows, setAllRows] = useState([]);
 
   useEffect(() => {
     try {
       const rows = db.getAllSync(`
-        SELECT m.title AS movie_title, p.name AS director_name 
+        SELECT m.title, r.rating, r.votes 
         FROM movies AS m 
-        JOIN directors AS d ON m.id = d.movie_id 
-        JOIN people AS p ON d.person_id = p.id 
-        WHERE m.year = 2020
+        JOIN ratings AS r ON m.id = r.movie_id 
+        ORDER BY r.rating DESC
+        LIMIT 50
       `);
       setAllRows(rows);
     } catch (error) {
@@ -21,18 +21,18 @@ const MoviesByYear = ({ db }) => {
   }, [db]);
 
   if (allRows.length === 0) {
-    return <Text style={sharedStyles.errorText}>Loading movies by year...</Text>;
+    return <Text style={sharedStyles.errorText}>Loading top rated movies...</Text>;
   }
 
   return (
     <SectionList
-      sections={[{ title: '2020 Movies', data: allRows }]}
-      keyExtractor={(item, index) => item.movie_title + index}
+      sections={[{ title: 'Top Rated Movies', data: allRows }]}
+      keyExtractor={(item, index) => item.title + index}
       renderItem={({ item }) => (
         <View style={sharedStyles.movieItem}>
-          <Text style={sharedStyles.movieTitle}>{item.movie_title}</Text>
-          <Text style={sharedStyles.directorName}>
-            Director: {item.director_name}
+          <Text style={sharedStyles.movieTitle}>{item.title}</Text>
+          <Text style={sharedStyles.movieDetails}>
+            Rating: {item.rating} | Votes: {item.votes}
           </Text>
         </View>
       )}
@@ -46,4 +46,4 @@ const MoviesByYear = ({ db }) => {
   );
 };
 
-export default MoviesByYear;
+export default TopRated;

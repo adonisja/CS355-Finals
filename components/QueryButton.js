@@ -1,37 +1,62 @@
 import React from 'react';
-import { TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { TouchableOpacity, Text, StyleSheet, ImageBackground, View } from 'react-native';
+
+const imageMap = {
+  DirectorsList: require('../assets/image/director_cut.webp'),
+  TopRated: require('../assets/image/top_rated.jpg'),
+  MoviesByYear: require('../assets/image/movie_timeline.jpg'),
+};
 
 export default function QueryButton({ label, queryType, navigation }) {
+  const imageSource = imageMap[queryType];
+
   return (
     <TouchableOpacity
-      style={styles.button}
+      style={styles.cardContainer}
       onPress={() => navigation.navigate('Results', { queryType })}
-      activeOpacity={0.8}
+      activeOpacity={0.85}
     >
-      <Text style={styles.buttonText}>{label}</Text>
+      <ImageBackground
+        source={imageSource}
+        style={styles.card}
+        imageStyle={styles.cardImage}
+      >
+        <View style={styles.overlay}>
+          <Text style={styles.cardText}>{label}</Text>
+        </View>
+      </ImageBackground>
     </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
-  button: {
-    backgroundColor: '#E50914',
-    paddingVertical: 16,
-    paddingHorizontal: 30,
-    borderRadius: 30,
-    marginVertical: 12,
-    width: '80%',
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 6,
+  cardContainer: {
+    width: '85%',
+    height: 140,
+    borderRadius: 20,
+    marginVertical: 10,
+    overflow: 'hidden',
     elevation: 5,
   },
-  buttonText: {
+  card: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  cardImage: {
+    borderRadius: 20,
+  },
+  overlay: {
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 20,
+  },
+  cardText: {
     color: '#FFF',
-    fontSize: 20,
-    fontWeight: '600',
+    fontSize: 22,
+    fontWeight: 'bold',
     letterSpacing: 1,
+    textAlign: 'center',
   },
 });
