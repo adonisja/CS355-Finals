@@ -29,7 +29,7 @@ export default function Results() {
 
   return (
     <SafeAreaView style={sharedStyles.safeArea}>
-      <View style={sharedStyles.container}>{content}</View>
+      <View style={{ flex: 1, paddingHorizontal: 8 }}>{content}</View>
     </SafeAreaView>
   );
 }

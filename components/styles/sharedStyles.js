@@ -1,28 +1,33 @@
+// sharedStyles.js
 import { StyleSheet } from 'react-native';
 
 const sharedStyles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: '#fefefe',
+    position: 'relative',
   },
   container: {
     flex: 1,
     paddingTop: 8,
   },
   searchContainer: {
-    padding: 12,
-    backgroundColor: '#f0f0f0',
+    marginBottom: 15,
+    paddingHorizontal: 16,
   },
   searchInput: {
     backgroundColor: '#fff',
-    padding: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
     borderRadius: 8,
     fontSize: 16,
+    marginBottom: 10,
     borderWidth: 1,
     borderColor: '#ccc',
   },
   mainContainer: {
     flex: 1,
+    position: 'relative', 
   },
   listContainer: {
     flex: 1,
@@ -39,35 +44,6 @@ const sharedStyles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: '#1e40af',
-  },
-  letterScrollerOverlay: {
-    position: 'absolute',
-    right: 0,
-    top: 70, 
-    bottom: 0,
-    width: 40,
-    backgroundColor: 'rgba(0, 0, 0, 0.15)', 
-    borderTopLeftRadius: 8,
-    borderBottomLeftRadius: 8,
-    justifyContent: 'center',
-    zIndex: 10,
-  },
-  letterContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 12,
-  },
-  letterButton: {
-    paddingVertical: 4,
-  },
-  letterText: {
-    fontSize: 14,
-    color: '#555',
-  },
-  activeLetter: {
-    fontWeight: 'bold',
-    color: '#1e3a8a',
-    textDecorationLine: 'underline',
   },
   movieItem: {
     paddingHorizontal: 16,
@@ -93,6 +69,37 @@ const sharedStyles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 20,
     color: 'red',
+  },
+
+  
+  letterScrollerOverlay: {
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    bottom: 0,
+    width: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 999,
+    backgroundColor: 'transparent', 
+    paddingVertical: 10,
+  },
+  letterContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  letterButton: {
+    paddingVertical: 4,
+    paddingHorizontal: 2,
+  },
+  letterText: {
+    fontSize: 14,
+    color: '#555',
+    fontWeight: '500',
+  },
+  activeLetter: {
+    color: '#1e40af',
+    fontWeight: 'bold',
   },
 });
 
