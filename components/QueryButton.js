@@ -1,5 +1,13 @@
+// QueryButton.js
 import React from 'react';
-import { TouchableOpacity, Text, StyleSheet, ImageBackground, View } from 'react-native';
+import {
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  ImageBackground,
+  Dimensions,
+} from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const imageMap = {
   DirectorsList: require('../assets/image/director_cut.webp'),
@@ -20,14 +28,20 @@ export default function QueryButton({ label, queryType, navigation }) {
         source={imageSource}
         style={styles.card}
         imageStyle={styles.cardImage}
+        resizeMode="cover"
       >
-        <View style={styles.overlay}>
+        <LinearGradient
+          colors={['rgba(0,0,0,0.2)', 'rgba(0,0,0,0.6)']}
+          style={styles.overlay}
+        >
           <Text style={styles.cardText}>{label}</Text>
-        </View>
+        </LinearGradient>
       </ImageBackground>
     </TouchableOpacity>
   );
 }
+
+const { width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   cardContainer: {
@@ -37,6 +51,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     overflow: 'hidden',
     elevation: 5,
+    alignSelf: 'center',
   },
   card: {
     flex: 1,
@@ -46,11 +61,11 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   overlay: {
-    backgroundColor: 'rgba(0,0,0,0.4)',
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 20,
+    paddingHorizontal: 10,
   },
   cardText: {
     color: '#FFF',
@@ -58,5 +73,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     letterSpacing: 1,
     textAlign: 'center',
+    textShadowColor: 'rgba(0, 0, 0, 0.8)',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 2,
   },
 });
