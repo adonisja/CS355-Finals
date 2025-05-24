@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, LayoutAnimation, UIManager, Platform } from 'react-native';
 import { Feather } from '@expo/vector-icons'; // Chevron icons
-import directorStyles from './styles/DirectorCardStyles';
-import sharedStyles from './styles/sharedStyles';
+import directorStyles from './styles/DirectorCardStyles'; // Make sure this path is correct
+import sharedStyles from './styles/sharedStyles'; // Make sure this path is correct
 
 if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -34,7 +34,9 @@ const DirectorCard = ({ name, movieCount, db }) => {
   const getInitial = (name) => name?.[0]?.toUpperCase() || '?';
 
   return (
-    <View style={directorStyles.cardWrapper}>
+    <View
+      style={directorStyles.cardWrapper}
+    >
       <TouchableOpacity style={directorStyles.card} onPress={toggleExpand}>
         <View style={directorStyles.avatar}>
           <Text style={directorStyles.avatarText}>{getInitial(name)}</Text>
