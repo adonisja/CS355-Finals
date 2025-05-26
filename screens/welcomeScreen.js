@@ -18,7 +18,7 @@ export default function WelcomeScreen() {
                 toValue: 1,
                 duration: 1000, // Duration of the fade-in
                 easing: Easing.ease,
-                useNativeDriver: true, // Use native driver for better performance
+                useNativeDriver: true, 
             }
         ).start();
 

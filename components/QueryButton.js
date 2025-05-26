@@ -1,19 +1,12 @@
-// QueryButton.js
 import React from 'react';
-import {
-  TouchableOpacity,
-  Text,
-  StyleSheet,
-  ImageBackground,
-  Dimensions,
-} from 'react-native';
+import { TouchableOpacity, Text, StyleSheet, ImageBackground, Dimensions,} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 const imageMap = {
   DirectorsList: require('../assets/image/director_cut.webp'),
   TopRated: require('../assets/image/top_rated.jpg'),
   MoviesByYear: require('../assets/image/movie_timeline.jpg'),
-  PopularActors: require('../assets/image/popular_actors.jpg'), // Added a new image for a new category
+  PopularActors: require('../assets/image/popular_actors.jpg'), 
 };
 
 export default function QueryButton({ label, queryType, navigation, customWidth, customHeight }) {
@@ -21,11 +14,10 @@ export default function QueryButton({ label, queryType, navigation, customWidth,
 
   return (
     <TouchableOpacity
-      // Apply customWidth and customHeight if provided, otherwise fallback to default
       style={[
         styles.cardContainer,
-        customWidth && { width: customWidth }, // Apply custom width
-        customHeight && { height: customHeight }, // Apply custom height
+        customWidth && { width: customWidth }, 
+        customHeight && { height: customHeight }, 
       ]}
       onPress={() => navigation.navigate('Results', { queryType })}
       activeOpacity={0.85}
@@ -47,42 +39,41 @@ export default function QueryButton({ label, queryType, navigation, customWidth,
   );
 }
 
-const { width: screenWidth } = Dimensions.get('window'); // Renamed to avoid conflict with 'width' prop
+const { width: screenWidth } = Dimensions.get('window'); 
 
 const styles = StyleSheet.create({
   cardContainer: {
-    // Default values, overridden by props if provided
-    width: screenWidth * 0.85, // Original large width, used if customWidth is not provided
-    height: 140, // Original height, used if customHeight is not provided
-    borderRadius: 10, // Slightly reduced for a tighter grid
-    marginVertical: 8, // Reduced margin for tighter grid
+    
+    width: screenWidth * 0.85, 
+    height: 140, 
+    borderRadius: 10, 
+    marginVertical: 8, 
     overflow: 'hidden',
     elevation: 5,
-    shadowColor: '#000', // Added shadow properties for consistency
+    shadowColor: '#000', 
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 4,
-    // alignSelf: 'center', // Removed this as it's now part of a flexWrap container
   },
   card: {
     flex: 1,
     justifyContent: 'center',
   },
   cardImage: {
-    borderRadius: 10, // Match cardContainer borderRadius
+    borderRadius: 10,
   },
   overlay: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 10, // Match cardContainer borderRadius
+    borderRadius: 10, 
     paddingHorizontal: 10,
   },
   cardText: {
     color: '#FFF',
-    fontSize: 18, // Slightly reduced font size for smaller cards
+    fontSize: 18, 
     fontWeight: 'bold',
-    letterSpacing: 0.8, // Slightly reduced letter spacing
+    letterSpacing: 0.8, 
     textAlign: 'center',
     textShadowColor: 'rgba(0, 0, 0, 0.8)',
     textShadowOffset: { width: 1, height: 1 },

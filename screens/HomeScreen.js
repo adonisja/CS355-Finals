@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Text, StyleSheet, SafeAreaView, View, Dimensions, FlatList, Image, TextInput, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import QueryButton from '../components/QueryButton'; // Your existing QueryButton
+import QueryButton from '../components/QueryButton'; 
 import { Ionicons } from '@expo/vector-icons';
 
-// Dummy Data for movie posters (Replace with your actual image paths)
+
 const dummyMoviePosters = [
   { id: '1', title: 'Arrival', image: require('../assets/image/arrival.jpeg') },
   { id: '2', title: 'Dune', image: require('../assets/image/dune.jpeg') },
@@ -15,9 +15,9 @@ const dummyMoviePosters = [
   { id: '7', title: 'Parasite', image: require('../assets/image/parasite.jpeg') },
 ];
 
-const { width } = Dimensions.get('window'); // Get screen width for responsive sizing
+const { width } = Dimensions.get('window'); 
 
-export default function HomeScreen({ db }) { // Destructure db from props
+export default function HomeScreen({ db }) { 
   const nav = useNavigation();
   const [searchText, setSearchText] = useState('');
 
@@ -26,8 +26,7 @@ export default function HomeScreen({ db }) { // Destructure db from props
       style={styles.moviePosterContainer}
       onPress={() => {
         console.log(`Tapped on movie: ${item.title}`);
-        // Example: navigate to a movie detail screen, or pre-fill search
-        // nav.navigate('MovieDetail', { title: item.title });
+        
       }}
     >
       <Image source={item.image} style={styles.moviePoster} />
@@ -45,7 +44,6 @@ export default function HomeScreen({ db }) { // Destructure db from props
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
       <View style={styles.headerContainer}>
         <Ionicons name="film-outline" size={36} color="#FFF" style={{ marginRight: 10 }} />
         <Text style={styles.headerText}>IMDB Query Hub</Text>
@@ -90,7 +88,7 @@ export default function HomeScreen({ db }) { // Destructure db from props
           <Text style={styles.sectionTitle}>Browse Categories</Text>
         </View>
         <View style={styles.categoryGrid}>
-          {/* We'll pass a custom width to QueryButton */}
+          {/* I'll pass a custom width to QueryButton */}
           <QueryButton
             label="Directors By Name"
             queryType="DirectorsList"
@@ -112,7 +110,6 @@ export default function HomeScreen({ db }) { // Destructure db from props
             customWidth={(width / 2) - 30}
             customHeight={120}
           />
-          {/* Add more categories here, ensuring they also get customWidth/Height */}
           <QueryButton
             label="Popular Actors"
             queryType="PopularActors"
@@ -130,25 +127,25 @@ export default function HomeScreen({ db }) { // Destructure db from props
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#141414', // A slightly lighter, yet still dark, background like Netflix
+    backgroundColor: '#141414', 
   },
   headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center', // Center the header
+    justifyContent: 'center',
     paddingVertical: 15,
-    backgroundColor: '#000', // A distinct background for the header
+    backgroundColor: '#000', 
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: '#333',
   },
   headerText: {
-    fontSize: 28, // Slightly adjusted for balance
+    fontSize: 28, 
     fontWeight: 'bold',
     color: '#FFF',
   },
   contentArea: {
     flex: 1,
-    paddingHorizontal: 10, // General padding for content inside
+    paddingHorizontal: 10, 
     paddingTop: 10,
   },
   // --- Search Bar Styles ---
@@ -177,7 +174,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 10,
     marginTop: 20,
-    paddingHorizontal: 5, // Align with flatlist content
+    paddingHorizontal: 5, 
   },
   sectionTitle: {
     fontSize: 20,
@@ -185,26 +182,26 @@ const styles = StyleSheet.create({
     color: '#FFF',
   },
   seeAllText: {
-    color: '#0080ff', // A vibrant blue for links/actions
+    color: '#0080ff', 
     fontSize: 14,
     fontWeight: '600',
   },
   // --- Movie Poster List Styles ---
   moviePosterList: {
-    paddingRight: 10, // Give some space at the end of the scroll
+    paddingRight: 10,
     paddingLeft: 5,
   },
   moviePosterContainer: {
     alignItems: 'center',
     marginRight: 15,
-    width: width * 0.28, // Roughly 3 posters visible at once + spacing
+    width: width * 0.28, 
   },
   moviePoster: {
     width: '100%',
-    height: (width * 0.28) * 1.5, // Standard poster aspect ratio (e.g., 2:3)
+    height: (width * 0.28) * 1.5, 
     borderRadius: 8,
     marginBottom: 5,
-    backgroundColor: '#222', // Placeholder background if image not loaded
+    backgroundColor: '#222', 
   },
   movieTitle: {
     color: '#FFF',
@@ -216,7 +213,7 @@ const styles = StyleSheet.create({
   // --- Category Grid Styles ---
   categoryGrid: {
     flexDirection: 'row',
-    flexWrap: 'wrap', // Allow items to wrap to next line
+    flexWrap: 'wrap', 
     justifyContent: 'space-between', // Distribute items evenly
     marginTop: 10,
     paddingHorizontal: 5, // This padding will influence the (width / 2) - 30 calculation

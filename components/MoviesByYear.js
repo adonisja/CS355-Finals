@@ -1,22 +1,25 @@
+// MoviesByYear.js
 import React, { useEffect, useState } from 'react';
-import {
-  SectionList,
-  Text,
-  View,
-  TextInput,
-  Button,
-  Keyboard,
-} from 'react-native';
+import { SectionList, Text, View, TextInput, Button, Keyboard, ActivityIndicator } from 'react-native';
 import sharedStyles from './styles/sharedStyles';
 
-const MoviesByYear = ({ db }) => {
+const MoviesByYear = ({ db }) => { 
   const [year, setYear] = useState('2020');
   const [allRows, setAllRows] = useState([]);
   const [errorMsg, setErrorMsg] = useState('');
+  const [isLoading, setIsLoading] = useState(false); 
 
-  const fetchMovies = (targetYear) => {
+  const fetchMovies = async (targetYear) => { 
+    setIsLoading(true);
     try {
-      const rows = db.getAllSync(
+      if (!db) { 
+        console.warn('DB not available in MoviesByYear.js');
+        setErrorMsg('Database not ready.');
+        setAllRows([]);
+        return;
+      }
+
+      const rows = await db.getAllAsync( 
         `
         SELECT m.title AS movie_title, p.name AS director_name
         FROM movies AS m
@@ -33,15 +36,23 @@ const MoviesByYear = ({ db }) => {
       console.error('Database query failed:', error);
       setErrorMsg('Query failed. Please try again.');
       setAllRows([]);
+    } finally {
+      setIsLoading(false); 
     }
   };
 
   useEffect(() => {
-    fetchMovies(year);
-  }, []);
+    if (db) {
+        fetchMovies(year);
+    }
+  }, [db]); 
 
   const handleSearch = () => {
     Keyboard.dismiss();
+    if (!db) { 
+        setErrorMsg('Database not ready. Please wait.');
+        return;
+    }
     if (/^\d{4}$/.test(year)) {
       fetchMovies(year);
     } else {
@@ -58,15 +69,21 @@ const MoviesByYear = ({ db }) => {
           onChangeText={setYear}
           keyboardType="numeric"
           placeholder="Enter year (e.g., 2020)"
+          placeholderTextColor="#BBBBBB"
           style={sharedStyles.searchInput}
           maxLength={4}
           returnKeyType="search"
           onSubmitEditing={handleSearch}
         />
-        <Button title="Search" onPress={handleSearch} />
+        <Button title="Search" onPress={handleSearch} color="#E50914" />
       </View>
 
-      {errorMsg ? (
+      {isLoading ? (
+        <View style={sharedStyles.loadingContainer}>
+          <ActivityIndicator size="large" color="#E50914" />
+          <Text style={sharedStyles.loadingText}>Searching movies...</Text>
+        </View>
+      ) : errorMsg ? (
         <Text style={sharedStyles.errorText}>{errorMsg}</Text>
       ) : (
         <SectionList
@@ -88,7 +105,7 @@ const MoviesByYear = ({ db }) => {
           contentContainerStyle={sharedStyles.listContent}
           keyboardShouldPersistTaps="handled"
           ListEmptyComponent={
-            <Text style={{ textAlign: 'center', marginTop: 20, color: '#666' }}>
+            <Text style={sharedStyles.emptyMessage}>
               No movies to display.
             </Text>
           }

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, LayoutAnimation, UIManager, Platform } from 'react-native';
-import { Feather } from '@expo/vector-icons'; // Chevron icons
-import directorStyles from './styles/DirectorCardStyles'; // Make sure this path is correct
-import sharedStyles from './styles/sharedStyles'; // Make sure this path is correct
+import { Feather } from '@expo/vector-icons'; 
+import directorStyles from './styles/DirectorCardStyles'; 
+import sharedStyles from './styles/sharedStyles'; 
 
 if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -48,7 +48,7 @@ const DirectorCard = ({ name, movieCount, db }) => {
         <Feather
           name={expanded ? 'chevron-up' : 'chevron-down'}
           size={24}
-          color="#444"
+          color="#999" 
         />
       </TouchableOpacity>
 
@@ -56,12 +56,12 @@ const DirectorCard = ({ name, movieCount, db }) => {
         <View style={directorStyles.expandedContent}>
           {movies.length > 0 ? (
             movies.map((movie, index) => (
-              <Text key={index} style={sharedStyles.movieItem}>
+              <Text key={index} style={directorStyles.movieItem}> 
                 {movie.title}
               </Text>
             ))
           ) : (
-            <Text style={sharedStyles.movieItem}>No movies found.</Text>
+            <Text style={directorStyles.noMoviesText}>No movies found for this director.</Text> 
           )}
         </View>
       )}

@@ -1,4 +1,3 @@
-// App.js
 import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -41,25 +40,20 @@ export default function App() {
         console.log('Database already exists at: ', dbPath);
       }
 
-      // --- CRITICAL STEP: OPEN THE DATABASE WITH THE CORRECT SYNCHRONOUS METHOD ---
-      // Use openDatabaseSync for synchronous operations, as you're using getAllSync
       const dbInstance = SQLite.openDatabaseSync(dbName);
 
       setDatabase(dbInstance);
-
-      setDatabase(dbInstance);
-      // --- END CRITICAL STEP ---
+      
 
       setDbReady(true);
     };
 
     installDB().catch((err) => {
       console.error("DB install failed:", err);
-      // Potentially set an error state here to show user.
     });
   }, []);
-
-  if (!dbReady || !database) { // Check if database instance is also ready
+    // Check if database instance is also ready
+  if (!dbReady || !database) { 
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <ActivityIndicator size="large" />
@@ -81,7 +75,7 @@ export default function App() {
         }}
       >
         <Stack.Screen name="Welcome" component={Welcome} options={{ headerShown: false }} />
-        {/* Pass the database instance as a prop */}
+        
         <Stack.Screen name="Home">
           {props => <Home {...props} db={database} />}
         </Stack.Screen>
